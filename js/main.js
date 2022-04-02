@@ -52,43 +52,52 @@ for(var film of films){
   elList.appendChild(newItem);
   
 }
-
-
+let bookMarks = [];
 
 elList.addEventListener("click", evt =>{
-  const isBookmarkBtn = evt.target.matches(".bookmark-button");
+  
+  if(evt.target.matches(".bookmark-button")){
+    const bookmarkBtnid = evt.target.dataset.filmId;
+    // console.log(bookmarkBtnid);
+    
+    const findFilms = films.find(e => e.id === bookmarkBtnid);
+    
+    console.log(findFilms);
+    
+    
+    if(!bookMarks.includes(findFilms)){
+      bookMarks.push(findFilms)
+    }
+    
+    
+    
+  };
+  
+  
+  renderBookmarks(bookMarks, elBookmarkList)  
   
   
   
-  let bookMarks = [];
   // console.log(bookMarks);
   
-  if (isBookmarkBtn){
-    const filmId = evt.target.dataset.filmId;
-    
-    const foundFilm = films.find((row) => row.id === filmId);
-    
-    if (!bookMarks.includes(foundFilm)) {
-      bookMarks.push(foundFilm)
-    }
-    renderBookmarks(bookMarks, elBookmarkList)
-  }
+  
+  
 })
 
 elBookmarkList.addEventListener("click", evt =>{
   if(evt.target.matches(".bookmark-remove-btn")){
-    let btnRemoveId = evt.target.dataset.dataId;
+    let btnRemoveId = evt.target.dataset.dataRemoveId;
     let findArray = bookMarks.findIndex(films => films.id == btnRemoveId);
-
+    
     bookMarks.splice(findArray, 1);
-
+    
     renderBookmarks(bookMarks, elBookmarkList);
   }
 })
 
 
 function renderBookmarks(arr, element) {
-  
+  element.innerHTML = ""  ;
   arr.forEach(e => {
     
     let bookmarkItem = document.createElement("li"); 
@@ -100,7 +109,7 @@ function renderBookmarks(arr, element) {
     
     bookmarkTitle.textContent = e.title;
     bookmarkRemoveBtn.textContent = "Remove";
-    
+    bookmarkRemoveBtn.dataset.dataRemoveId = e.id;
     
     bookmarkItem.classList.add("bookmark-item");
     bookmarkTitle.classList.add("bookmark-title")
